@@ -44,6 +44,7 @@ services:
       dockerfile: Dockerfile
     container_name: superset-app
     environment:
+      - FLASK_APP=superset
       - SUPERSET_SECRET_KEY=${SUPERSET_SECRET_KEY:-changeme-secretkey-for-production}
       - DATABASE_DIALECT=postgresql
       - DATABASE_USER=${POSTGRES_USER:-superset}

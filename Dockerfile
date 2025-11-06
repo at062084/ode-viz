@@ -5,6 +5,7 @@ FROM python:3.10-slim-bullseye
 ENV LANG=C.UTF-8 \
     LC_ALL=C.UTF-8 \
     PYTHONUNBUFFERED=1 \
+    FLASK_APP=superset \
     SUPERSET_HOME=/app/superset \
     SUPERSET_CONFIG_PATH=/app/superset/superset_config.py
 
