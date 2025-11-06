@@ -35,6 +35,7 @@ WORKDIR /app
 # Install Apache Superset with all optional dependencies
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
     pip install --no-cache-dir \
+    'marshmallow>=3.18.0,<4.0.0' \
     'apache-superset[postgres,redis,celery,cors]' \
     psycopg2-binary
 
