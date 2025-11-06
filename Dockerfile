@@ -38,7 +38,8 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
     apache-superset \
     psycopg2-binary \
     redis \
-    celery
+    celery \
+    flask-cors
 
 # Create superset directories
 RUN mkdir -p ${SUPERSET_HOME} /app/superset_home
