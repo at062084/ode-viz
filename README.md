@@ -48,6 +48,18 @@ Default credentials:
 
 **Important:** Change the default admin password immediately after first login!
 
+## 📊 Create Your First Dashboard
+
+After Superset is running, create your first statistical dashboard with the Austrian employment data:
+
+**→ [QUICK_START_DASHBOARD.md](QUICK_START_DASHBOARD.md)** - Step-by-step dashboard creation
+
+Additional guides:
+- [FIRST_DASHBOARD.md](FIRST_DASHBOARD.md) - Detailed GUI walkthrough
+- [STATISTICAL_DASHBOARD.md](STATISTICAL_DASHBOARD.md) - Advanced statistical analysis
+- [DATA_DICTIONARY.md](DATA_DICTIONARY.md) - Understand the dataset
+- [DEPLOYMENT_WORKFLOW.md](DEPLOYMENT_WORKFLOW.md) - Deploy dashboards to production
+
 ## Configuration
 
 ### Environment Variables
