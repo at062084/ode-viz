@@ -50,8 +50,8 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 # Note: Configuration file is mounted via volume in docker-compose.yml
 # No need to COPY during build
 
-# Create superset user
-RUN useradd -m -d /app superset && \
+# Create superset user (without -m flag to avoid home directory creation conflicts)
+RUN useradd --no-create-home --home-dir /app superset && \
     chown -R superset:superset /app
 
 # Switch to superset user
