@@ -61,7 +61,8 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ./superset_config.py:/app/superset/superset_config.py:ro
+      - ./inventory/config/superset/superset_config.py:/app/superset/superset_config.py:ro
+      - ./project/superset:/app/superset_home:rw
       - superset-data:/app/superset
     networks:
       - superset-network

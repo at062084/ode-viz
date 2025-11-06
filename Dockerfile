@@ -38,11 +38,11 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
     redis \
     celery
 
-# Create superset directory
-RUN mkdir -p ${SUPERSET_HOME}
+# Create superset directories
+RUN mkdir -p ${SUPERSET_HOME} /app/superset_home
 
 # Copy configuration file (if exists)
-COPY superset_config.py ${SUPERSET_CONFIG_PATH} 2>/dev/null || :
+COPY inventory/config/superset/superset_config.py ${SUPERSET_CONFIG_PATH} 2>/dev/null || :
 
 # Create superset user
 RUN useradd -m -d /app superset && \

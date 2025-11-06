@@ -62,13 +62,44 @@ Edit the `.env` file to customize:
 
 ### Advanced Configuration
 
-For advanced Superset configuration, edit `superset_config.py`:
+For advanced Superset configuration, edit `inventory/config/superset/superset_config.py`:
 
 - Database connections
 - Cache settings
 - Feature flags
 - Security settings
 - And more
+
+## Directory Structure
+
+```
+ode-viz/
+├── inventory/
+│   └── config/
+│       └── superset/           # Superset configuration files
+│           ├── superset_config.py
+│           └── README.md
+├── project/
+│   └── superset/               # Custom application code (mounted to container)
+│       ├── visualizations/     # Custom chart plugins
+│       ├── dashboards/         # Dashboard templates
+│       ├── connectors/         # Database connectors
+│       ├── security/           # Authentication providers
+│       ├── api/               # Custom API endpoints
+│       ├── utils/             # Utility scripts
+│       └── README.md
+├── data/                       # Test data files (not committed)
+├── .github/
+│   └── workflows/             # GitHub Actions workflows
+├── Dockerfile
+├── docker-compose.yml
+├── .env                       # Environment variables (not committed)
+└── .env.example              # Environment template
+```
+
+**Key Directories:**
+- `inventory/config/superset/` - Configuration files (read-only in container)
+- `project/superset/` - Application code (read-write in container at `/app/superset_home`)
 
 ## Services
 
