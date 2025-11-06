@@ -62,19 +62,25 @@ def upload_csv_data():
 
     print(f"   Loaded {len(df)} rows, {len(df.columns)} columns")
 
-    # Connect to Examples database (SQLite)
-    examples_db = 'sqlite:////app/superset_home/examples.db'
-    engine = create_engine(examples_db)
+    # Connect to PostgreSQL database (same as Superset metadata DB)
+    db_url = 'postgresql+psycopg2://superset:superset@postgres:5432/superset'
+    engine = create_engine(db_url)
+
+    # Upload to database in 'data' schema (create schema if needed)
+    print("   Creating 'data' schema in PostgreSQL...")
+    with engine.connect() as conn:
+        conn.execute(text("CREATE SCHEMA IF NOT EXISTS data"))
+        conn.commit()
 
     # Upload to database
-    print("   Uploading to database...")
-    df.to_sql('austrian_employment', engine, if_exists='replace', index=False)
+    print("   Uploading to database (schema: data, table: austrian_employment)...")
+    df.to_sql('austrian_employment', engine, schema='data', if_exists='replace', index=False)
 
-    print(f"   ✅ Uploaded to table 'austrian_employment'")
+    print(f"   ✅ Uploaded to table 'data.austrian_employment'")
 
     # Verify
     with engine.connect() as conn:
-        result = conn.execute(text("SELECT COUNT(*) FROM austrian_employment"))
+        result = conn.execute(text("SELECT COUNT(*) FROM data.austrian_employment"))
         count = result.scalar()
         print(f"   Verified: {count} rows in database")
 
@@ -84,20 +90,29 @@ def create_dataset():
     """Create or sync the dataset in Superset."""
     print("\n📋 Step 2: Registering dataset...")
 
-    print("   ℹ️  Dataset created in database (Examples/examples.db)")
-    print("   ℹ️  You need to register it in Superset GUI:")
+    print("   ℹ️  Data uploaded to PostgreSQL (schema: data, table: austrian_employment)")
+    print("   ℹ️  Now register it in Superset GUI (version 5.0.0+):")
     print("")
-    print("   1. Go to: Data → Databases")
-    print("   2. Click on 'Examples' database")
-    print("   3. Click 'Tables' tab → 'Sync columns from source'")
-    print("   OR")
-    print("   1. Go to: Data → Datasets → + Dataset")
-    print("   2. Select database: 'Examples'")
-    print("   3. Select schema: 'main'")
-    print("   4. Select table: 'austrian_employment'")
-    print("   5. Click 'Add'")
+    print("   STEP 1: Add Database Connection (if not already added)")
+    print("   -----------------------------------------------------")
+    print("   1. Click: Settings (⚙️) → Database Connections")
+    print("      OR: Click '+' button → '+ Data' → 'Connect Database'")
+    print("   2. Select: PostgreSQL")
+    print("   3. Fill in:")
+    print("      - Display Name: Analytics")
+    print("      - SQLAlchemy URI: postgresql+psycopg2://superset:superset@postgres:5432/superset")
+    print("   4. Click: Connect")
     print("")
-    print("   ✅ Data is ready in database, just needs GUI registration")
+    print("   STEP 2: Add Dataset")
+    print("   --------------------")
+    print("   1. Click: Datasets (top menu) → + Dataset")
+    print("   2. Fill in:")
+    print("      - Database: Analytics (or superset_db)")
+    print("      - Schema: data")
+    print("      - Table: austrian_employment")
+    print("   3. Click: Add")
+    print("")
+    print("   ✅ Then you can create charts!")
 
     return True
 
@@ -229,16 +244,24 @@ def main():
     print("\n" + "=" * 60)
     print("✅ DATA UPLOAD COMPLETE!")
     print("=" * 60)
-    print("\n📖 Next Steps:")
+    print("\n📖 Next Steps (Superset 5.0.0):")
     print("   1. Open Superset: http://localhost:8088")
     print("   2. Login: admin / admin")
-    print("   3. Register dataset: Data → Datasets → + Dataset")
-    print("      - Database: 'Examples'")
-    print("      - Schema: 'main'")
-    print("      - Table: 'austrian_employment'")
-    print("      - Click 'Add'")
-    print("   4. Create charts using the GUI (see FIRST_DASHBOARD.md)")
-    print("   5. Or use SQL Lab with queries from quick_queries.sql")
+    print("")
+    print("   3. Add Database Connection:")
+    print("      Settings (⚙️) → Database Connections → + Database")
+    print("      Select: PostgreSQL")
+    print("      Display Name: Analytics")
+    print("      SQLAlchemy URI: postgresql+psycopg2://superset:superset@postgres:5432/superset")
+    print("")
+    print("   4. Add Dataset:")
+    print("      Datasets (top menu) → + Dataset")
+    print("      Database: Analytics")
+    print("      Schema: data")
+    print("      Table: austrian_employment")
+    print("")
+    print("   5. Create charts using the GUI (see FIRST_DASHBOARD.md)")
+    print("   6. Or use SQL Lab with queries from quick_queries.sql")
     print("\n📚 Documentation:")
     print("   • FIRST_DASHBOARD.md - Step-by-step GUI guide")
     print("   • STATISTICAL_DASHBOARD.md - Advanced statistical analysis")

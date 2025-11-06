@@ -11,9 +11,9 @@ Create a dashboard showing:
 
 ## ⚡ Two Paths - Choose One
 
-### Path A: Automated Setup (Quickest)
+### Path A: Automated Setup (Quickest) ⭐ RECOMMENDED
 
-Run this script to automatically upload the data:
+Run this script to automatically upload the data to PostgreSQL:
 
 ```bash
 # 1. Copy CSV to container
@@ -24,14 +24,19 @@ docker-compose exec superset python /app/superset_home/utils/create_sample_dashb
 ```
 
 This will:
-- Upload CSV to database (table: `austrian_employment`)
 - Auto-detect CSV encoding (UTF-8, Windows CP1252, ISO-8859-1, etc.)
-- Create dataset in Superset
+- Upload CSV to PostgreSQL database (schema: `data`, table: `austrian_employment`)
+- Create 276,723 rows in the database
 - Generate SQL queries you can use
 
-**Note on Encoding:** The script automatically tries multiple encodings (UTF-8, CP1252, ISO-8859-1, Latin1, Windows-1252) to handle Western European Windows files.
+**Then in Superset GUI (version 5.0.0):**
+1. Add database connection: Settings → Database Connections → + Database
+   - PostgreSQL: `postgresql+psycopg2://superset:superset@postgres:5432/superset`
+   - Display Name: Analytics
+2. Add dataset: Datasets → + Dataset
+   - Database: Analytics, Schema: data, Table: austrian_employment
 
-Then follow **FIRST_DASHBOARD.md** to create charts in the GUI.
+**Detailed instructions:** See **FIRST_DASHBOARD.md** for step-by-step GUI walkthrough.
 
 ### Path B: Manual Setup (Learn as you go)
 
