@@ -106,7 +106,7 @@ ode-viz/
 The stack includes three services:
 
 1. **superset** - Apache Superset application (port 8088)
-2. **postgres** - PostgreSQL database (port 5432)
+2. **postgres** - PostgreSQL database (port 6543)
 3. **redis** - Redis cache (port 6379)
 
 ## Common Commands
@@ -223,14 +223,14 @@ docker-compose up -d
     │         │
 ┌───▼──┐  ┌──▼───┐
 │Redis │  │Postgres│
-│:6379 │  │ :5432  │
+│:6379 │  │ :6543  │
 └──────┘  └────────┘
 ```
 
 ## Ports
 
 - 8088: Superset web interface
-- 5432: PostgreSQL (accessible from host)
+- 6543: PostgreSQL (accessible from host, mapped to internal port 5432)
 - 6379: Redis (accessible from host)
 
 ## GitHub Actions Deployment
