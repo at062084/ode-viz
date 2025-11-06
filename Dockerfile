@@ -7,7 +7,8 @@ ENV LANG=C.UTF-8 \
     PYTHONUNBUFFERED=1 \
     FLASK_APP=superset \
     SUPERSET_HOME=/app/superset \
-    SUPERSET_CONFIG_PATH=/app/superset/superset_config.py
+    SUPERSET_CONFIG_PATH=/app/superset/superset_config.py \
+    HOME=/app
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -50,8 +51,10 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 # Note: Configuration file is mounted via volume in docker-compose.yml
 # No need to COPY during build
 
-# Create superset user (without -m flag to avoid home directory creation conflicts)
-RUN useradd --no-create-home --home-dir /app superset && \
+# Create superset user as system user (avoids home directory creation entirely)
+# Using -r (system user) and explicit UID to avoid conflicts
+RUN groupadd -r -g 1000 superset && \
+    useradd -r -u 1000 -g superset -d /app -s /sbin/nologin superset && \
     chown -R superset:superset /app
 
 # Switch to superset user
