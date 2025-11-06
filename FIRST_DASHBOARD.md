@@ -2,9 +2,25 @@
 
 Let's create your first dashboard with the Austrian employment data.
 
-## 📊 Step 1: Upload Your CSV Data
+## 📊 Step 1: Register Your Dataset
 
-### Via Superset GUI (Easiest)
+**If you ran the automated setup** (`create_sample_dashboard.py`), your data is already uploaded! Just register it:
+
+1. **Open Superset:** http://localhost:8088
+2. **Click:** Data → Datasets → **+ Dataset**
+3. **Fill in:**
+   - Database: **Examples**
+   - Schema: **main**
+   - Table: **austrian_employment**
+4. **Click:** Add
+
+Done! Skip to **Step 2** below.
+
+---
+
+### Alternative: Upload CSV via GUI
+
+If you didn't run the automated setup:
 
 1. **Open Superset:** http://localhost:8088
 2. **Click:** Data → Upload a CSV to database
