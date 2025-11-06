@@ -25,8 +25,11 @@ docker-compose exec superset python /app/superset_home/utils/create_sample_dashb
 
 This will:
 - Upload CSV to database (table: `austrian_employment`)
+- Auto-detect CSV encoding (UTF-8, Windows CP1252, ISO-8859-1, etc.)
 - Create dataset in Superset
 - Generate SQL queries you can use
+
+**Note on Encoding:** The script automatically tries multiple encodings (UTF-8, CP1252, ISO-8859-1, Latin1, Windows-1252) to handle Western European Windows files.
 
 Then follow **FIRST_DASHBOARD.md** to create charts in the GUI.
 
@@ -107,11 +110,23 @@ A: Live dashboards in PostgreSQL database. Export to .zip files for backup/deplo
 **Q: How do I update a dashboard?**
 A: Edit in GUI → Export again → Replace .zip file → Restart container
 
+**Q: Getting encoding errors when uploading CSV?**
+A: The script now auto-detects encodings. If issues persist:
+```bash
+# Option 1: Detect encoding first
+docker-compose exec superset python /app/superset_home/utils/detect_encoding.py /tmp/AL_Ausbildung_RGS.csv
+
+# Option 2: Convert to UTF-8 on host before copying
+iconv -f CP1252 -t UTF-8 data/AL_Ausbildung_RGS.csv > data/AL_Ausbildung_RGS_utf8.csv
+docker-compose cp data/AL_Ausbildung_RGS_utf8.csv superset-app:/tmp/AL_Ausbildung_RGS.csv
+```
+
 ## 🆘 Need Help?
 
 1. Check **TROUBLESHOOTING.md**
 2. Check logs: `docker-compose logs -f superset`
 3. Check data uploaded: SQL Lab → `SELECT COUNT(*) FROM austrian_employment`
+4. Encoding issues: Use `detect_encoding.py` (see above)
 
 ---
 
