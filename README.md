@@ -202,6 +202,82 @@ docker-compose up -d
 - 5432: PostgreSQL (accessible from host)
 - 6379: Redis (accessible from host)
 
+## GitHub Actions Deployment
+
+This repository includes a GitHub Action workflow for automated deployment to a remote host (PULPHOST).
+
+### Setup
+
+1. **Configure GitHub Secrets**:
+
+   Go to your repository Settings → Secrets and variables → Actions, and add:
+
+   - `SSH_PRIVATE_KEY`: Your SSH private key for accessing the deployment host
+   - `SSH_USER`: SSH username for the deployment host (e.g., `ubuntu`, `deploy`)
+   - `PULPHOST`: Hostname or IP address of your deployment host (e.g., `superset.example.com`)
+
+2. **Generate SSH Key** (if needed):
+   ```bash
+   ssh-keygen -t ed25519 -C "github-actions-deploy"
+   ```
+
+   Add the public key to `~/.ssh/authorized_keys` on your deployment host.
+
+3. **Configure Environment Variables**:
+
+   On your deployment host, create `/home/<user>/superset-deployment/.env`:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   nano .env
+   ```
+
+### Workflow Triggers
+
+The deployment workflow runs automatically on:
+- Push to `main` or `master` branch
+- Manual trigger via GitHub Actions UI
+
+### Manual Deployment
+
+To manually trigger a deployment:
+
+1. Go to Actions tab in GitHub
+2. Select "Build and Deploy Apache Superset" workflow
+3. Click "Run workflow"
+4. Choose the branch and click "Run workflow"
+
+### What the Workflow Does
+
+1. Checks out the repository code
+2. Builds the Docker image using the Dockerfile
+3. Saves and compresses the Docker image
+4. Connects to PULPHOST via SSH
+5. Transfers the image and configuration files
+6. Loads the Docker image on the remote host
+7. Deploys using docker-compose
+8. Verifies the deployment
+
+### Requirements on Deployment Host
+
+The deployment host (PULPHOST) must have:
+- Docker Engine 20.10+
+- Docker Compose 2.0+
+- SSH access configured
+- Sufficient disk space for Docker images and volumes
+
+### Monitoring Deployment
+
+View deployment logs in:
+- GitHub Actions → Workflows → Build and Deploy Apache Superset
+
+On the deployment host:
+```bash
+cd ~/superset-deployment
+docker-compose logs -f
+docker-compose ps
+```
+
 ## Support
 
 For issues and questions:
