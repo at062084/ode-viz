@@ -68,9 +68,9 @@ def upload_csv_data():
 
     # Upload to database in 'data' schema (create schema if needed)
     print("   Creating 'data' schema in PostgreSQL...")
-    with engine.connect() as conn:
+    # Using .begin() for automatic commit (SQLAlchemy 2.0 compatible)
+    with engine.begin() as conn:
         conn.execute(text("CREATE SCHEMA IF NOT EXISTS data"))
-        conn.commit()
 
     # Upload to database
     print("   Uploading to database (schema: data, table: austrian_employment)...")
