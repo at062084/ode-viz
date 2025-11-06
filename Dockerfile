@@ -41,8 +41,8 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
 # Create superset directories
 RUN mkdir -p ${SUPERSET_HOME} /app/superset_home
 
-# Copy configuration file (if exists)
-COPY inventory/config/superset/superset_config.py ${SUPERSET_CONFIG_PATH} 2>/dev/null || :
+# Note: Configuration file is mounted via volume in docker-compose.yml
+# No need to COPY during build
 
 # Create superset user
 RUN useradd -m -d /app superset && \
