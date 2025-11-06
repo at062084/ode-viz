@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     pkg-config \
     postgresql-client \
+    netcat-traditional \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -40,6 +41,10 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
 
 # Create superset directories
 RUN mkdir -p ${SUPERSET_HOME} /app/superset_home
+
+# Copy entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Note: Configuration file is mounted via volume in docker-compose.yml
 # No need to COPY during build
@@ -62,4 +67,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
 WORKDIR ${SUPERSET_HOME}
 
 # Default command
-CMD ["sh", "-c", "superset db upgrade && superset fab create-admin --username admin --firstname Admin --lastname User --email admin@superset.com --password admin && superset init && superset run -h 0.0.0.0 -p 8088"]
+CMD ["docker-entrypoint.sh"]
