@@ -51,14 +51,9 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 # Note: Configuration file is mounted via volume in docker-compose.yml
 # No need to COPY during build
 
-# Create superset user as system user (avoids home directory creation entirely)
-# Using -r (system user) and explicit UID to avoid conflicts
-RUN groupadd -r -g 1000 superset && \
-    useradd -r -u 1000 -g superset -d /app -s /sbin/nologin superset && \
-    chown -R superset:superset /app
-
-# Switch to superset user
-USER superset
+# Note: User creation moved to docker-compose.yml (user: "1000:1000")
+# Running as root during build avoids permission issues on self-hosted runners
+# Security: Container will run as non-root at runtime via docker-compose
 
 # Expose port
 EXPOSE 8088
