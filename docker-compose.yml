@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:14-alpine
+    container_name: superset-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-superset}
+      POSTGRES_USER: ${POSTGRES_USER:-superset}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-superset}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-superset}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - superset-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: superset-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - superset-network
+
+  # Apache Superset
+  superset:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: superset-app
+    environment:
+      - SUPERSET_SECRET_KEY=${SUPERSET_SECRET_KEY:-changeme-secretkey-for-production}
+      - DATABASE_DIALECT=postgresql
+      - DATABASE_USER=${POSTGRES_USER:-superset}
+      - DATABASE_PASSWORD=${POSTGRES_PASSWORD:-superset}
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_DB=${POSTGRES_DB:-superset}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    ports:
+      - "8088:8088"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./superset_config.py:/app/superset/superset_config.py:ro
+      - superset-data:/app/superset
+    networks:
+      - superset-network
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local
+  superset-data:
+    driver: local
+
+networks:
+  superset-network:
+    driver: bridge
