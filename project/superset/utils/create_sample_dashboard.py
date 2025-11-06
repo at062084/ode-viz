@@ -31,12 +31,34 @@ def upload_csv_data():
         print("   docker-compose cp data/AL_Ausbildung_RGS.csv superset-app:/tmp/AL_Ausbildung_RGS.csv")
         return False
 
-    # Read CSV
+    # Read CSV with encoding detection
     print(f"   Reading {csv_path}...")
-    df = pd.read_csv(csv_path, sep=';', encoding='utf-8')
+
+    # Try multiple encodings (Windows Western European encodings)
+    encodings = ['utf-8', 'cp1252', 'iso-8859-1', 'latin1', 'windows-1252']
+    df = None
+
+    for encoding in encodings:
+        try:
+            print(f"   Trying encoding: {encoding}...")
+            df = pd.read_csv(csv_path, sep=';', encoding=encoding)
+            print(f"   ✅ Successfully read with {encoding}")
+            break
+        except (UnicodeDecodeError, Exception) as e:
+            print(f"   ✗ Failed with {encoding}")
+            continue
+
+    if df is None:
+        print("   ❌ Could not read CSV with any known encoding")
+        print("   Try checking the file encoding manually")
+        return False
 
     # Parse date column
-    df['Datum'] = pd.to_datetime(df['Datum'])
+    try:
+        df['Datum'] = pd.to_datetime(df['Datum'])
+    except Exception as e:
+        print(f"   ⚠️  Warning: Could not parse 'Datum' column: {e}")
+        print("   Continuing without date parsing...")
 
     print(f"   Loaded {len(df)} rows, {len(df.columns)} columns")
 
