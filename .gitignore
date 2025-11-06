@@ -43,5 +43,3 @@ celerybeat-schedule
 *.log
 logs/
 
-# Data
-data/
