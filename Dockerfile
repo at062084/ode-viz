@@ -7,7 +7,8 @@ ENV LANG=C.UTF-8 \
     PYTHONUNBUFFERED=1 \
     FLASK_APP=superset \
     SUPERSET_HOME=/app/superset \
-    SUPERSET_CONFIG_PATH=/app/superset/superset_config.py
+    SUPERSET_CONFIG_PATH=/app/superset/superset_config.py \
+    HOME=/app
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -50,12 +51,9 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 # Note: Configuration file is mounted via volume in docker-compose.yml
 # No need to COPY during build
 
-# Create superset user (without -m flag to avoid home directory creation conflicts)
-RUN useradd --no-create-home --home-dir /app superset && \
-    chown -R superset:superset /app
-
-# Switch to superset user
-USER superset
+# Note: User creation moved to docker-compose.yml (user: "1000:1000")
+# Running as root during build avoids permission issues on self-hosted runners
+# Security: Container will run as non-root at runtime via docker-compose
 
 # Expose port
 EXPOSE 8088
