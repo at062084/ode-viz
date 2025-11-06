@@ -82,19 +82,22 @@ def upload_csv_data():
 
 def create_dataset():
     """Create or sync the dataset in Superset."""
-    print("\n📋 Step 2: Creating dataset...")
+    print("\n📋 Step 2: Registering dataset...")
 
-    # Use superset CLI to sync database
-    result = subprocess.run(
-        ['superset', 'sync-database-tables', '--database', 'Examples'],
-        capture_output=True,
-        text=True
-    )
-
-    if result.returncode == 0:
-        print("   ✅ Dataset 'austrian_employment' synced")
-    else:
-        print(f"   ⚠️  Sync warning: {result.stderr}")
+    print("   ℹ️  Dataset created in database (Examples/examples.db)")
+    print("   ℹ️  You need to register it in Superset GUI:")
+    print("")
+    print("   1. Go to: Data → Databases")
+    print("   2. Click on 'Examples' database")
+    print("   3. Click 'Tables' tab → 'Sync columns from source'")
+    print("   OR")
+    print("   1. Go to: Data → Datasets → + Dataset")
+    print("   2. Select database: 'Examples'")
+    print("   3. Select schema: 'main'")
+    print("   4. Select table: 'austrian_employment'")
+    print("   5. Click 'Add'")
+    print("")
+    print("   ✅ Data is ready in database, just needs GUI registration")
 
     return True
 
@@ -224,12 +227,16 @@ def main():
     create_sql_queries_file()
 
     print("\n" + "=" * 60)
-    print("✅ SETUP COMPLETE!")
+    print("✅ DATA UPLOAD COMPLETE!")
     print("=" * 60)
     print("\n📖 Next Steps:")
     print("   1. Open Superset: http://localhost:8088")
     print("   2. Login: admin / admin")
-    print("   3. Check Data → Datasets - you should see 'austrian_employment'")
+    print("   3. Register dataset: Data → Datasets → + Dataset")
+    print("      - Database: 'Examples'")
+    print("      - Schema: 'main'")
+    print("      - Table: 'austrian_employment'")
+    print("      - Click 'Add'")
     print("   4. Create charts using the GUI (see FIRST_DASHBOARD.md)")
     print("   5. Or use SQL Lab with queries from quick_queries.sql")
     print("\n📚 Documentation:")
