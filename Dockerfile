@@ -33,10 +33,11 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Install Apache Superset with all optional dependencies
+# Pin to 5.0.x - allows patch releases (5.0.1, 5.0.2) but prevents breaking changes (5.1.0+)
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
     pip install --no-cache-dir \
     'marshmallow>=3.18.0,<4.0.0' \
-    'apache-superset[postgres,redis,celery,cors]' \
+    'apache-superset[postgres,redis,celery,cors]>=5.0.0,<5.1.0' \
     psycopg2-binary
 
 # Create superset directories

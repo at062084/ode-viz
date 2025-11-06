@@ -1,4 +1,4 @@
-# Creating Your First Superset Dashboard
+# Creating Your First Superset Dashboard (v5.0.x)
 
 Your data: **Austrian Employment by Education Level & Region**
 - Date: 2019-01-31 onwards
@@ -23,36 +23,46 @@ Let's do **both**! Start with GUI to learn, then I'll show you the programmatic 
 
 ---
 
-## 🖱️ GUI Approach: Step-by-Step
+## 🖱️ GUI Approach: Step-by-Step (Superset 5.0.x)
 
-### Step 1: Upload Your CSV Data
+### Step 1: Upload Your CSV Data (Automated Method Recommended)
 
-1. **Access Superset:** http://localhost:8088
-2. **Click:** Data → Upload a CSV to database
-3. **Fill in the form:**
-   - **CSV File:** Browse to `data/AL_Ausbildung_RGS.csv`
-   - **Table Name:** `austrian_employment`
-   - **Database:** Examples (or create new)
-   - **Delimiter:** `;` (semicolon - important!)
-   - **Skip Initial Space:** Check this
-   - **Parse Dates:** Add column name: `Datum`
+**Recommended: Use the automated setup script:**
 
-4. **Click:** Save
-
-**Alternative:** Copy CSV into container first:
 ```bash
-docker-compose cp data/AL_Ausbildung_RGS.csv superset-app:/tmp/
+# Copy CSV to container
+docker-compose cp data/AL_Ausbildung_RGS.csv superset-app:/tmp/AL_Ausbildung_RGS.csv
+
+# Run automated upload
+docker-compose exec superset python /app/superset_home/utils/create_sample_dashboard.py
 ```
 
-### Step 2: Create a Dataset
+This uploads your data to PostgreSQL in the `data.austrian_employment` table.
 
-1. **Click:** Data → Datasets
-2. **Click:** + Dataset button
+**Alternative: Manual GUI upload** (less reliable for large files):
+1. **Access Superset:** http://localhost:8088
+2. **Click:** Settings (⚙️) → SQL Lab → Upload CSV
+3. Configure delimiter, parse dates, etc.
+
+### Step 2: Add Database Connection (if not exists)
+
+1. **Click:** Settings (⚙️) → **Database Connections**
+2. **Click:** **+ Database**
+3. **Select:** PostgreSQL
+4. **Fill in:**
+   - **Display Name:** `Analytics`
+   - **SQLAlchemy URI:** `postgresql+psycopg2://superset:superset@postgres:5432/superset`
+5. **Click:** Test Connection → Connect
+
+### Step 3: Register Your Dataset
+
+1. **Click:** **Datasets** (top menu)
+2. **Click:** **+ Dataset** button (top right)
 3. **Select:**
-   - **Database:** Examples
-   - **Schema:** (leave default or public)
+   - **Database:** Analytics
+   - **Schema:** data
    - **Table:** `austrian_employment`
-4. **Click:** Create Dataset and Create Chart
+4. **Click:** Add
 
 ### Step 3: Create Your First Chart - Time Series
 

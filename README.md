@@ -4,17 +4,21 @@ A Docker-based deployment of Apache Superset with PostgreSQL and Redis.
 
 ## Features
 
-- Apache Superset latest version
+- Apache Superset 5.0.x (pinned to minor version, allows patch updates)
 - PostgreSQL 14 as metadata database
-- Redis for caching and Celery message broker
+- Redis 7 for caching and Celery message broker
+- Python 3.10 runtime
 - Health checks for all services
 - Persistent volumes for data
 - Configurable via environment variables
+- Automated dashboard import on startup
 
 ## Prerequisites
 
 - Docker Engine 20.10+
-- Docker Compose 2.0+
+- Docker Compose 1.29+ (or Docker Compose V2)
+
+**Note:** This setup is tested with Superset 5.0.x. See [VERSION_COMPATIBILITY.md](VERSION_COMPATIBILITY.md) for version details.
 
 ## Quick Start
 

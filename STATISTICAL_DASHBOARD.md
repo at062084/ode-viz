@@ -1,6 +1,6 @@
-# Creating a Statistical Dashboard with Univariate & Bivariate Analysis
+# Creating a Statistical Dashboard with Univariate & Bivariate Analysis (Superset 5.0.x)
 
-This guide shows you how to create a dashboard with proper statistical analysis for your Austrian employment data.
+This guide shows you how to create a dashboard with proper statistical analysis for your Austrian employment data using Superset 5.0.x.
 
 ## 📊 What You'll Create
 
@@ -80,13 +80,17 @@ Use the pre-built queries in `project/superset/utils/statistical_queries.sql`:
 
 ### 3.1 Upload Data
 
-1. **Data** → **Upload a CSV**
-2. Settings:
-   - File: `data/AL_Ausbildung_RGS.csv`
-   - Table Name: `austrian_employment`
-   - Delimiter: `;` (semicolon!)
-   - Parse Dates: Check "Datum"
-3. Click **Save**
+**Use the automated setup (recommended):**
+
+```bash
+docker-compose cp data/AL_Ausbildung_RGS.csv superset-app:/tmp/AL_Ausbildung_RGS.csv
+docker-compose exec superset python /app/superset_home/utils/create_sample_dashboard.py
+```
+
+Then register the dataset:
+1. **Datasets** (top menu) → **+ Dataset**
+2. Database: Analytics, Schema: data, Table: austrian_employment
+3. Click **Add**
 
 ### 3.2 Create Statistical Charts
 
