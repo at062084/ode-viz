@@ -210,6 +210,7 @@ This repository includes a GitHub Action workflow for automated deployment to a 
 - [QUICK_START_DEPLOYMENT.md](QUICK_START_DEPLOYMENT.md) - 5-minute setup guide
 - [DEPLOYMENT_SETUP.md](DEPLOYMENT_SETUP.md) - Complete step-by-step guide
 - [GITHUB_ACTIONS_FIREWALL.md](GITHUB_ACTIONS_FIREWALL.md) - IP firewall configuration (if your server restricts SSH by IP)
+- [SELF_HOSTED_RUNNER_SETUP.md](SELF_HOSTED_RUNNER_SETUP.md) - Set up self-hosted runner (recommended for simplified deployment)
 
 ### Setup
 

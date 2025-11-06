@@ -4,6 +4,20 @@
 
 GitHub Actions runners use **dynamic IP addresses** from Microsoft Azure's infrastructure. The IP changes with each workflow run, making traditional IP whitelisting difficult.
 
+## ✅ Recommended: Self-Hosted Runner (Already Configured!)
+
+**Good news!** This repository is now configured to use a **self-hosted runner** on PULPHOST. This completely eliminates the firewall issue because the runner is already on your server.
+
+👉 See [SELF_HOSTED_RUNNER_SETUP.md](SELF_HOSTED_RUNNER_SETUP.md) for setup instructions.
+
+No SSH required, no IP whitelisting needed - everything runs locally!
+
+---
+
+## Alternative Solutions
+
+If you prefer to use GitHub's hosted runners instead, here are the options:
+
 ## Solution Options
 
 ### Option 1: Whitelist GitHub's IP Ranges (Recommended for most cases)
