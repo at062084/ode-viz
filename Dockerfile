@@ -32,14 +32,11 @@ RUN apt-get update && apt-get install -y \
 # Create application directory
 WORKDIR /app
 
-# Install Apache Superset
+# Install Apache Superset with all optional dependencies
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
     pip install --no-cache-dir \
-    apache-superset \
-    psycopg2-binary \
-    redis \
-    celery \
-    flask-cors
+    'apache-superset[postgres,redis,celery,cors]' \
+    psycopg2-binary
 
 # Create superset directories
 RUN mkdir -p ${SUPERSET_HOME} /app/superset_home

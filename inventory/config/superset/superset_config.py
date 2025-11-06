@@ -1,5 +1,4 @@
 import os
-from celery.schedules import crontab
 
 # Superset specific config
 ROW_LIMIT = 5000
@@ -44,28 +43,13 @@ DATA_CACHE_CONFIG = {
     'CACHE_REDIS_DB': 2,
 }
 
-# Celery configuration
+# Celery configuration - Minimal for now
 class CeleryConfig:
     broker_url = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
-    imports = ('superset.sql_lab', 'superset.tasks')
+    imports = ('superset.sql_lab',)
     result_backend = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
     worker_prefetch_multiplier = 10
     task_acks_late = True
-    task_annotations = {
-        'sql_lab.get_sql_results': {
-            'rate_limit': '100/s',
-        },
-    }
-    beat_schedule = {
-        'reports.scheduler': {
-            'task': 'reports.scheduler',
-            'schedule': crontab(minute=0, hour=0),
-        },
-        'reports.prune_log': {
-            'task': 'reports.prune_log',
-            'schedule': crontab(minute=0, hour=0),
-        },
-    }
 
 CELERY_CONFIG = CeleryConfig
 
@@ -79,25 +63,18 @@ WTF_CSRF_TIME_LIMIT = 60 * 60 * 24 * 365
 # Set this API key to enable Mapbox visualizations
 MAPBOX_API_KEY = os.environ.get('MAPBOX_API_KEY', '')
 
-# Feature flags
+# Feature flags - Start with minimal features
 FEATURE_FLAGS = {
-    'ENABLE_TEMPLATE_PROCESSING': True,
+    'ENABLE_TEMPLATE_PROCESSING': False,
     'DASHBOARD_NATIVE_FILTERS': True,
     'DASHBOARD_CROSS_FILTERS': True,
-    'DASHBOARD_RBAC': True,
-    'EMBEDDED_SUPERSET': True,
-    'ALERT_REPORTS': True,
+    'DASHBOARD_RBAC': False,
+    'EMBEDDED_SUPERSET': False,
+    'ALERT_REPORTS': False,  # Disabled - requires additional dependencies
 }
 
 # Additional configuration
 ENABLE_PROXY_FIX = True
-ENABLE_CORS = True
-CORS_OPTIONS = {
-    'supports_credentials': True,
-    'allow_headers': ['*'],
-    'resources': ['*'],
-    'origins': ['*']
-}
 
 # Async query configuration
 GLOBAL_ASYNC_QUERIES_REDIS_CONFIG = {
