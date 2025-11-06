@@ -206,6 +206,10 @@ docker-compose up -d
 
 This repository includes a GitHub Action workflow for automated deployment to a remote host (PULPHOST).
 
+**📚 New to GitHub Actions?** See our beginner-friendly guides:
+- [QUICK_START_DEPLOYMENT.md](QUICK_START_DEPLOYMENT.md) - 5-minute setup guide
+- [DEPLOYMENT_SETUP.md](DEPLOYMENT_SETUP.md) - Complete step-by-step guide
+
 ### Setup
 
 1. **Configure GitHub Secrets**:
