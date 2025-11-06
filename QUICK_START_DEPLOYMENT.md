@@ -115,6 +115,7 @@ Default login:
 | "Docker daemon socket error" | Run `sudo usermod -aG docker $USER` then log out/in |
 | "Port already allocated" | Run `docker compose down` on server |
 | Can't access Superset | Check firewall: `sudo ufw allow 8088` |
+| **SSH blocked by IP firewall** | **See [GITHUB_ACTIONS_FIREWALL.md](GITHUB_ACTIONS_FIREWALL.md)** |
 
 ## Need More Details?
 

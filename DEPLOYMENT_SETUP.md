@@ -198,13 +198,14 @@ Access Superset at: `http://YOUR_SERVER_IP:8088`
 
 ### SSH Connection Fails
 
-**Error:** `Permission denied (publickey)`
+**Error:** `Permission denied (publickey)` or `Connection timed out`
 
 **Solution:**
 1. Verify the private key is correctly added to GitHub Secrets
 2. Verify the public key is in `~/.ssh/authorized_keys` on the server
 3. Check SSH user is correct
 4. Test manually: `ssh -i ~/.ssh/github-actions-deploy user@host`
+5. **If your server has IP-restricted SSH firewall:** See [GITHUB_ACTIONS_FIREWALL.md](GITHUB_ACTIONS_FIREWALL.md) for how to whitelist GitHub's IPs
 
 ### Docker Command Fails
 
