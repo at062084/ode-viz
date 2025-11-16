@@ -1,0 +1,29 @@
+# This file defines the libs required for the Streamlit EDA dashboard
+# dtale libs are maintained in seperte req file
+
+# 1.42.3
+streamlit
+
+# parquet
+pyarrow
+
+# 0.3.0
+summarytools
+
+# 2.3.1. Last updated 2023-11.
+sweetviz
+
+#  0.4.9.14 still under development
+pygwalker
+
+# 0.4.5 Last updated 2022-08. Latest python version is 3.10
+dataprep
+
+# Claude LLM: 0.49.0
+anthropic
+anthropic[vertex]
+
+networkx
+pyvis
+
+

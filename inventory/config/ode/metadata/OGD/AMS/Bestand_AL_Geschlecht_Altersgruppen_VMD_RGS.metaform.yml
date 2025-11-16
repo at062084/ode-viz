@@ -1,0 +1,28 @@
+dataset_id: "Bestand_AL_Geschlecht_Altersgruppen_VMD_RGS.csv"
+origin: "OGD"
+provider: "AMS"
+
+transformations:
+  rename:
+    RGSCode: "idRGS"
+    RGSName: "RGS"
+    Vormerkdauer: "gemeldetZeitSpanne"
+    DS_VMD: "mittlereGemeldetTage"
+    BESTAND: "Gemeldete"
+
+  convert:
+    gemeldetZeitSpanne:
+      to_type: "ordered_categorical"
+      levels: ["0 bis 90 Tage", "91 bis 180 Tage", "181 bis 365 Tage", "366 Tage und mehr"]
+
+  add_columns:
+    idxGemeldetZeitSpanne:
+      from: "gemeldetZeitSpanne"
+      operation: "ordinal_index"
+    idxAltersGruppe:
+      from: "Altersgruppe"
+      operation: "ordinal_index"
+
+  select:
+    columns: ["Datum", "RGS", "Geschlecht", "Altersgruppe", "gemeldetZeitSpanne",
+              "mittlereGemeldetTage", "Gemeldete", "idRGS", "idxAltersGruppe", "idxGemeldetZeitSpanne"]

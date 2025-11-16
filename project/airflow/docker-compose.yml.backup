@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: ode-opendataexplorer_postgres
+    environment:
+      POSTGRES_DB: airflow
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    volumes:
+      - /export/data/postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - proxynet
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U airflow"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+
+  airflow:
+    image: ${PROJECT_IMAGE:-registry.gitlab.com/your-project/airflow:latest}
+    container_name: ode-opendataexplorer_airflow
+    environment:
+      # Core settings optimized for 4-core machine
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__PARALLELISM: 6
+      AIRFLOW__CORE__MAX_ACTIVE_TASKS_PER_DAG: 3
+      AIRFLOW__CORE__MAX_ACTIVE_RUNS_PER_DAG: 1
+      AIRFLOW__CORE__DAGBAG_IMPORT_TIMEOUT: 30
+      
+      # Database connection
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      
+      # Performance tuning for 4 cores
+      AIRFLOW__SCHEDULER__PARSING_PROCESSES: 2
+      AIRFLOW__SCHEDULER__MAX_THREADS: 2
+      AIRFLOW__WEBSERVER__WORKERS: 2
+      AIRFLOW__WEBSERVER__WORKER_REFRESH_INTERVAL: 30
+      
+      # Your existing paths
+      AIRFLOW__CORE__DAGS_FOLDER: /export/project/airflow/dag
+      AIRFLOW__CORE__BASE_LOG_FOLDER: /export/log/airflow
+      AIRFLOW__LOGGING__LOGGING_LEVEL: INFO
+      
+      # Disable examples
+      AIRFLOW__CORE__LOAD_EXAMPLES: False
+      AIRFLOW__CORE__LOAD_DEFAULT_CONNECTIONS: False
+      
+      # Your existing env vars
+      INVENTORY_ROOT_DIR: /export/inventory
+      DATA_ROOT_DIR: /export/data
+      PYTHONPATH: /export
+      PYTHONUNBUFFERED: "1"
+      
+      # Proxy settings
+      VIRTUAL_HOST: air.rshiny.world
+      
+    volumes:
+      # Your existing mount points from CI
+      - /export/log:/export/log
+      - /export/inventory:/export/inventory
+      - /export/vault/airflow.conf:/export/vault/airflow.conf
+      - /export/data:/export/data
+      - /export/airflow:/export/airflow
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - proxynet
+    privileged: true
+
+networks:
+  proxynet:
+    external: true

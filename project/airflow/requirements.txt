@@ -1,0 +1,30 @@
+# This file defines the python libs required for the anyLangFlow datapipeline operated by Airflow
+
+# airflow with PostgreSQL support
+# --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.10.5/constraints-3.8.txt"
+apache-airflow[celery,postgres]==2.10.5
+apache-airflow-providers-http
+apache-airflow-providers-postgres
+graphviz
+
+# PostgreSQL driver (also installed in Dockerfile for redundancy)
+psycopg2-binary
+
+# data handling
+pandas
+geopandas
+polars
+
+# parquet
+pyarrow
+
+# YAML configuration
+PyYAML
+
+# plotting
+plotnine
+folium
+
+# lineage graph
+networkx
+pyvis

@@ -1,0 +1,33 @@
+# Configuration for file extensions used in lineage node classification
+
+script_extensions:
+  - sh
+  - r
+  - R
+  - sql
+  - py
+  - sas
+
+data_extensions:
+  - csv
+  - parquet
+
+export_extensions:
+  - png
+  - json
+  - xlsx
+
+download_extensions:
+  - csv
+  - xlsx
+  - json
+
+# Special node patterns for lineage graph (kept for backward compatibility)
+domain_nodes:
+  - OGD
+  - COMMERCIAL  # Future domains
+
+organization_nodes:
+  - AMS
+  - MA23
+  # Add more organizations as needed

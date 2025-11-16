@@ -1,0 +1,61 @@
+# Connector definitions for data ingestion
+# Each connector defines HOW to download data
+# Format: <protocol><ContentType><Pattern><Processing>
+
+httpCsvDirect:
+  description: "Direct CSV download over HTTP"
+  transport: http
+  method: GET
+  content_type: csv
+  redirect: false
+  processors: []
+
+httpCsvRedirectDescription:
+  description: "CSV with redirect and first line removal (MA23 pattern)"
+  transport: http
+  method: GET
+  content_type: csv
+  redirect: true
+  processors:
+    - remove_first_line
+
+httpCsvDirectDescription:
+  description: "Direct CSV with first line removal"
+  transport: http
+  method: GET
+  content_type: csv
+  redirect: false
+  processors:
+    - remove_first_line
+
+httpJsonDirect:
+  description: "Direct JSON download over HTTP"
+  transport: http
+  method: GET
+  content_type: json
+  redirect: false
+  processors: []
+
+httpJsonRedirect:
+  description: "JSON with redirect handling"
+  transport: http
+  method: GET
+  content_type: json
+  redirect: true
+  processors: []
+
+httpXlsxDirect:
+  description: "Direct Excel download over HTTP"
+  transport: http
+  method: GET
+  content_type: xlsx
+  redirect: false
+  processors: []
+
+httpXlsxRedirect:
+  description: "Excel with redirect handling"
+  transport: http
+  method: GET
+  content_type: xlsx
+  redirect: true
+  processors: []
